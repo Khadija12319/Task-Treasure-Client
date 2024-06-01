@@ -7,6 +7,8 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import ErrorPage from './components/ErrorPage/ErrorPage.jsx';
+import Register from './components/Register/Register.jsx';
+import Context from './Context/Context.jsx';
 
 const router = createBrowserRouter([
   {
@@ -15,6 +17,8 @@ const router = createBrowserRouter([
     errorElement:<ErrorPage></ErrorPage>,
     children: [
       {
+        path:'/register',
+        element:<Register></Register>
       }
     ]
   },
@@ -22,6 +26,8 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
+    <Context>
     <RouterProvider router={router} />
+    </Context>
   </React.StrictMode>,
 )

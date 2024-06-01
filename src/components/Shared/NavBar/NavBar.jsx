@@ -53,8 +53,9 @@ function NavBar() {
 
     return (
       <>
-       <div className="container mx-auto">
-       <div className="navbar bg-base-100">
+       <div className="">
+       <div className="container">
+       <div className="navbar bg-base-100 fixed z-10 lg:px-12 bg-opacity-30">
   <div className="navbar-start">
     <div className="dropdown">
     <MdOutlineMenuOpen className="text-2xl" onClick={toggleDrawer(true)}/>
@@ -64,7 +65,7 @@ function NavBar() {
     </div>
   </div>
   <div className="navbar-center">
-    <a className="btn btn-ghost text-2xl"><GiTwoCoins className="text-yellow-500 text-3xl"/> TaskTreasure</a>
+    <Link to='/' className="btn btn-ghost text-2xl"><GiTwoCoins className="text-yellow-500 text-3xl"/> TaskTreasure</Link>
   </div>
   <div className="navbar-end">
     <button className="btn btn-ghost btn-circle">
@@ -80,6 +81,7 @@ function NavBar() {
     </Link>
   </div>
 </div>
+       </div>
        </div>
       </>
     )
