@@ -4,7 +4,7 @@ import "../../App.css"
 const Banner = () =>{
     return(
         <div>
-            <Carousel className="text-center h-[800px]" ariaLabel={false}>
+            <Carousel className="text-center h-[800px] bg-[#EDE8F5]" ariaLabel={false}>
                 <div className="slide-container">
                     <img src="https://i.ibb.co/nDQmpz0/portrait-woman-desk-working-with-laptop-late-night.jpg" />
                     <div className="slide-content">
