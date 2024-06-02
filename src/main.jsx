@@ -9,6 +9,7 @@ import {
 import ErrorPage from './components/ErrorPage/ErrorPage.jsx';
 import Register from './components/Register/Register.jsx';
 import Context from './Context/Context.jsx';
+import Login from './components/Login/Login.jsx';
 
 const router = createBrowserRouter([
   {
@@ -19,6 +20,12 @@ const router = createBrowserRouter([
       {
         path:'/register',
         element:<Register></Register>
+      },{
+        path:'/login',
+        element:<Login></Login>
+      },
+      {
+        
       }
     ]
   },

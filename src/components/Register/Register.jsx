@@ -103,26 +103,23 @@ const Register= () =>{
                         <form onSubmit={handleLogin}>
                             <div className="flex flex-col pb-3">
                                 <label className="text-black font-medium text-lg pb-2 pl-1">Name</label>
-                                <input type="text" name="name" placeholder="Enter Your Name" className="w-[80%] px-5 py-3 rounded-xl"/>
+                                <input type="text" name="name" placeholder="Enter Your Name" className="w-[80%] px-5 py-3 rounded-xl" required/>
                             </div>
                             <div className="flex flex-col pb-3">
                                 <label className="text-black font-medium text-lg pb-2 pl-1">Email</label>
-                                <input type="email" name="email" placeholder="Enter Your Email" className="w-[80%] px-5 py-3 rounded-xl"/>
+                                <input type="email" name="email" placeholder="Enter Your Email" className="w-[80%] px-5 py-3 rounded-xl" required/>
                             </div>
                             <div className="flex flex-col pb-3">
                                 <label className="text-black font-medium text-lg pb-2 pl-1">Photo URL</label>
-                                <input type="text" name="photo" placeholder="Your Photo Url" className="w-[80%] px-5 py-3 rounded-xl"/>
+                                <input type="text" name="photo" placeholder="Your Photo Url" className="w-[80%] px-5 py-3 rounded-xl" required/>
                             </div>
-                            <div className="flex flex-col pb-3">
+                            <div className="flex flex-col">
                                 <label className="text-black font-medium text-lg pb-2 pl-1">Password</label>
-                                <input type={showPassword ? "text" : "password"} name="password" placeholder="password" className="w-[80%] px-5 py-3 rounded-xl" required />
+                                <input required type={showPassword ? "text" : "password"} name="password" placeholder="password" className="w-[80%] px-5 py-3 rounded-xl" />
                     <span onClick={ () => setShowPassword(!showPassword)} className="md:translate-x-[85%] translate-x-[80%] -translate-y-[35px] text-2xl w-[80%] px-5 rounded-xl">{showPassword? <IoEyeOff className="text-black"/> : <IoEye className="text-black"/>}</span>
                     {
                         registerError && <p className="text-red-500">{registerError}</p>
                     }
-                    <label className="label">
-                        <a href="#" className="label-text-alt link link-hover text-lg text-black">Forgot password?</a>
-                    </label>
                             </div>
                             <div className="flex flex-col pb-3">
                                  <label className="text-black font-medium text-lg pb-2 pl-1" name="role" >Role</label>
