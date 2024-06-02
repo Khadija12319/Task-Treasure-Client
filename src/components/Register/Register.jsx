@@ -10,6 +10,7 @@ const Register= () =>{
     const {createUser,logInGoogle} = useContext(AuthContext);
     const [user ,setUser] = useState(null);
     const [registerError, setRegisterError] =useState(null);
+    const [emailError,setEmailError] =useState(null);
     const [showPassword, setShowPassword] = useState(false);
     const location = useLocation();
     const navigate = useNavigate();
@@ -23,14 +24,21 @@ const Register= () =>{
         const role=formData.get('role');
         console.log(user);
         setRegisterError(null);
+        setEmailError(null);
 
-        const isValidPassword = /^(?=.*[a-z])(?=.*[A-Z])/.test(password);
-        if(password.length <6){
-            setRegisterError("Password should be at least 6 character or long");
+
+        const isValidEmail= /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        if(!isValidEmail){
+            setEmailError("Invalid email format");
+        }
+
+        const isValidPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(password);
+        if(password.length <8){
+            setRegisterError("Password should be at least 8 character or long");
             return;
         }else if(!isValidPassword)
         {
-            setRegisterError("password should contain at least one uppercase and one lowercase letter");
+            setRegisterError("Password must include an uppercase letter, a lowercase letter, a number, and a special character.");
             return;
         }
         const name =formData.get('name');
@@ -108,6 +116,9 @@ const Register= () =>{
                             <div className="flex flex-col pb-3">
                                 <label className="text-black font-medium text-lg pb-2 pl-1">Email</label>
                                 <input type="email" name="email" placeholder="Enter Your Email" className="w-[80%] px-5 py-3 rounded-xl" required/>
+                                {
+                        emailError && <p className="text-red-500">{emailError}</p>
+                    }
                             </div>
                             <div className="flex flex-col pb-3">
                                 <label className="text-black font-medium text-lg pb-2 pl-1">Photo URL</label>

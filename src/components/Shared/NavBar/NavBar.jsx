@@ -54,8 +54,8 @@ function NavBar() {
     return (
       <>
        <div className="">
-       <div className="container">
-       <div className="navbar bg-base-100 fixed z-10 lg:px-12 bg-opacity-30">
+       <div className="container mx-auto">
+       <div className="navbar bg-base-100">
   <div className="navbar-start">
     <div className="dropdown">
     <MdOutlineMenuOpen className="text-2xl" onClick={toggleDrawer(true)}/>
@@ -68,8 +68,8 @@ function NavBar() {
     <Link to='/' className="btn btn-ghost text-2xl"><GiTwoCoins className="text-yellow-500 text-3xl"/> TaskTreasure</Link>
   </div>
   <div className="navbar-end">
-    <button className="btn btn-ghost btn-circle">
-      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+    <button className="btn btn-ghost">
+    <a href="https://youtu.be/7uF05BuweRA?si=z9sTt3T3TnBXe8iJ" target="_blank">Watch Demo</a>
     </button>
     <Link to="/login"><button className="btn btn-ghost">
       Login

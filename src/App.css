@@ -7,3 +7,41 @@
     width: 100vw;
     
 }
+
+.carousel .slide img {
+    max-height: 700px; /* Adjust this value to the desired height */
+    object-fit: cover; /* Ensures the image covers the area without stretching */
+}
+
+.carousel .thumbs-wrapper {
+    height: auto !important; /* Keeps the thumbnail height unaffected */
+}
+
+.carousel .slide-container {
+    position: relative;
+    text-align: center;
+    color: white;
+}
+
+.carousel .slide-content {
+    position: absolute;
+    bottom: 40%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    padding: 10px;
+    border-radius: 5px;
+    width: 80%; /* Adjust the width as needed */
+}
+
+.carousel .slide-content h2 {
+    margin: 0;
+    font-size: 40px;
+    font-weight: 700;
+}
+
+.carousel .slide-content p {
+    margin: 5px 0 0;
+    font-size: 24px;
+}
+
