@@ -4,9 +4,11 @@ import { AuthContext } from "../../Context/Context";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { IoEye, IoEyeOff } from "react-icons/io5";
+import useAxiosPublic from "../Hooks/useAxiosPublic";
 
 const Login= () =>{
     const {logInUser,logInGoogle} = useContext(AuthContext);
+    const axiosPublic=useAxiosPublic();
     const [user ,setUser] = useState(null);
     const location = useLocation();
     const navigate = useNavigate();
@@ -40,6 +42,19 @@ const Login= () =>{
             logInGoogle()
             .then(result => {
                 const resUser= result.user;
+                const userInfo={
+                    email:resUser.email,
+                    name:resUser.displayName,
+                    photo:resUser.photoURL,
+                    role:'worker',
+                    coins:10
+                }
+                axiosPublic.post('/users',userInfo)
+                .then(res => {
+                    if(res.data.insertedId){
+                        console.log('user added to the database'); }
+                })
+                .catch()
                setUser(resUser);
                 navigate(location?.state ? location.state : '/')
             })

@@ -9,14 +9,23 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { GiTwoCoins } from "react-icons/gi";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../../../Context/Context";
+import { RiCoinsFill } from "react-icons/ri";
 
 function NavBar() {
 
   const [open, setOpen] = useState(false);
+  const [coin,setCoin]=useState(0);
+  const {user,logOut} =useContext(AuthContext);
 
+  const handleSignOut = () =>{
+    logOut()
+    .then()
+    .catch()
+  }
   const toggleDrawer = (newOpen) => () => {
     setOpen(newOpen);
   };
@@ -57,28 +66,54 @@ function NavBar() {
        <div className="container mx-auto">
        <div className="navbar bg-base-100">
   <div className="navbar-start">
-    <div className="dropdown">
+    {
+      user? (
+        <>
+        <div className="dropdown">
     <MdOutlineMenuOpen className="text-2xl" onClick={toggleDrawer(true)}/>
     <Drawer open={open} onClose={toggleDrawer(false)}>
         {DrawerList}
       </Drawer>
     </div>
+        </>
+      ):(
+        <></>
+      )
+    }
   </div>
   <div className="navbar-center">
     <Link to='/' className="btn btn-ghost text-2xl"><GiTwoCoins className="text-yellow-500 text-3xl"/> TaskTreasure</Link>
   </div>
   <div className="navbar-end">
-    <button className="btn btn-ghost">
-    <a href="https://youtu.be/7uF05BuweRA?si=z9sTt3T3TnBXe8iJ" target="_blank">Watch Demo</a>
-    </button>
-    <Link to="/login"><button className="btn btn-ghost">
-      Login
+   {
+    user? (
+       <>
+       <button className="btn btn-ghost"><RiCoinsFill className="text-2xl text-yellow-500"/> Available Coin <span>({coin})</span></button>
+    <Link><button className="btn btn-ghost">
+      User Profile
     </button></Link>
-    <Link to="/register">
-    <button className="btn btn-ghost">
-      Register
+    <Link>
+    <button className="btn btn-ghost" onClick={handleSignOut}>
+      Logout
     </button>
     </Link>
+       </>):
+       (
+       <>
+       <button className="btn btn-ghost">
+       <a href="https://youtu.be/7uF05BuweRA?si=z9sTt3T3TnBXe8iJ" target="_blank">Watch Demo</a>
+       </button>
+       <Link to="/login"><button className="btn btn-ghost">
+         Login
+       </button></Link>
+       <Link to="/register">
+       <button className="btn btn-ghost">
+         Register
+       </button>
+       </Link>
+       </>
+    )
+   }
   </div>
 </div>
        </div>

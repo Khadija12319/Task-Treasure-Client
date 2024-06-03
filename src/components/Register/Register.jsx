@@ -5,10 +5,13 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { updateProfile } from "firebase/auth";
 import { IoEye, IoEyeOff } from "react-icons/io5";
+import useAxiosPublic from "../Hooks/useAxiosPublic";
+import { ResetTv } from "@mui/icons-material";
 
 const Register= () =>{
-    const {createUser,logInGoogle} = useContext(AuthContext);
-    const [user ,setUser] = useState(null);
+    const axiosPublic = useAxiosPublic();
+    const {createUser,logInGoogle,user} = useContext(AuthContext);
+    const [users ,setUser] = useState(null);
     const [registerError, setRegisterError] =useState(null);
     const [emailError,setEmailError] =useState(null);
     const [showPassword, setShowPassword] = useState(false);
@@ -22,7 +25,6 @@ const Register= () =>{
         const email= formData.get('email');
         const password =formData.get('password');
         const role=formData.get('role');
-        console.log(user);
         setRegisterError(null);
         setEmailError(null);
 
@@ -43,7 +45,8 @@ const Register= () =>{
         }
         const name =formData.get('name');
         const photoURL =formData.get('photo');
-        console.log(email,password,name,photoURL,role);
+        const coins = role === 'worker' ? 10 : 50;
+
 
         if (email && password) {
             // Create user
@@ -53,7 +56,21 @@ const Register= () =>{
                setUser(resUser);
                updateProfile(resUser,{displayName:name,
             photoURL:photoURL})
-            .then()
+            .then(()=> {
+                const userInfo= {
+                     name:name,
+                     email:email,
+                     photo:photoURL,
+                     role:role,
+                     coins:coins
+                }
+                axiosPublic.post('/users',userInfo)
+                .then(res => {
+                    if(res.data.insertedId){
+                        console.log('user added to the database'); }
+                })
+                .catch()
+            })
             .catch()
                console.log(resUser);
                notifySuccess("User created successfully");
@@ -66,11 +83,26 @@ const Register= () =>{
                 setRegisterError(error.message);
             });
         } }
+
         const handleGoogleLogin = () => {
+
             // Sign in with Google
             logInGoogle()
             .then(result => {
                 const resUser= result.user;
+                const userInfo={
+                    email:resUser.email,
+                    name:resUser.displayName,
+                    photo:resUser.photoURL,
+                    role:'worker',
+                    coins:10
+                }
+                axiosPublic.post('/users',userInfo)
+                .then(res => {
+                    if(res.data.insertedId){
+                        console.log('user added to the database'); }
+                })
+                .catch()
                setUser(resUser);
                 navigate(location?.state ? location.state : '/')
             })
@@ -98,7 +130,7 @@ const Register= () =>{
         };
 
     return(
-        <div className="bg-[#ADBBDA] h-fit py-20">
+        <div className="bg-[#ADBBDA] h-fit py-20 overflow-hidden">
             <div className="w-4/5 mx-auto bg-[#EDE8F5] rounded-3xl">
                 <div className="flex items-center justify-center gap-10">
                     <div className="flex-1">
