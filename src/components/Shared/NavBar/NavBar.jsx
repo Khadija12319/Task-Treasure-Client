@@ -1,64 +1,35 @@
 import { MdOutlineMenuOpen } from "react-icons/md";
-import Box from '@mui/material/Box';
-import Drawer from '@mui/material/Drawer';
-import List from '@mui/material/List';
-import Divider from '@mui/material/Divider';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { GiTwoCoins } from "react-icons/gi";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../../Context/Context";
 import { RiCoinsFill } from "react-icons/ri";
+import useAxiosCoins from "../../Hooks/useAxiosCoins";
+import WorkerDashboard from "../../Home/WorkerDashboard";
 
 function NavBar() {
-
-  const [open, setOpen] = useState(false);
-  const [coin,setCoin]=useState(0);
+  const [coins,refetch]= useAxiosCoins();
   const {user,logOut} =useContext(AuthContext);
+  const [coin,setCoin]=useState(0);
+  const [role,setRole]=useState(null);
+
+
+  useEffect(() => {
+    if (user) {
+      refetch();
+      coins.map(co=>{
+        setCoin(co.coins);
+        setRole(co.role);
+      }) // Fetch coins data when user is logged in
+    }
+  }, [user, refetch,coins]);
 
   const handleSignOut = () =>{
     logOut()
     .then()
     .catch()
   }
-  const toggleDrawer = (newOpen) => () => {
-    setOpen(newOpen);
-  };
 
-  const DrawerList = (
-    <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
-      <List>
-        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-      <Divider />
-      <List>
-        {['All mail', 'Trash', 'Spam'].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-    </Box>
-  );
 
     return (
       <>
@@ -69,12 +40,56 @@ function NavBar() {
     {
       user? (
         <>
-        <div className="dropdown">
-    <MdOutlineMenuOpen className="text-2xl" onClick={toggleDrawer(true)}/>
-    <Drawer open={open} onClose={toggleDrawer(false)}>
-        {DrawerList}
-      </Drawer>
-    </div>
+          {
+            role==="worker" &&(
+              <div className="drawer z-10 ">
+              <input id="my-drawer" type="checkbox" className="drawer-toggle" />
+              <div className="drawer-content">
+                {/* Page content here */}
+                <label htmlFor="my-drawer" className="btn btn-primary drawer-button"><MdOutlineMenuOpen className="text-2xl"  /></label>
+              </div> 
+              <div className="drawer-side ">
+                <label htmlFor="my-drawer" aria-label="close sidebar" className="drawer-overlay "></label>
+                <ul className="menu p-4 w-80 min-h-full text-base-content bg-[#7091E6]">
+                  {/* Sidebar content here */}
+                  <Link className="text-white text-xl font-semibold py-2"><li><a>Home</a></li></Link>
+                  <Link className="text-white text-xl font-semibold py-2"><li><a>TaskList</a></li></Link>
+                  <Link className="text-white text-xl font-semibold py-2"><li><a>My Submissions</a></li></Link>
+
+                </ul>
+            </div>
+          </div>
+            )
+          }
+          {
+            role==="taskCreator" &&(
+              <>
+              <Link to='/taskCreatordashboard'>
+              <label htmlFor="my-drawer" className="btn btn-primary drawer-button"><MdOutlineMenuOpen className="text-2xl" /></label></Link>
+              </>
+            )
+          }
+          {
+            role==="admin" &&(
+              <div className="drawer z-10 ">
+              <input id="my-drawer" type="checkbox" className="drawer-toggle" />
+              <div className="drawer-content">
+                {/* Page content here */}
+                <label htmlFor="my-drawer" className="btn btn-primary drawer-button"><MdOutlineMenuOpen className="text-2xl"  /></label>
+              </div> 
+              <div className="drawer-side ">
+                <label htmlFor="my-drawer" aria-label="close sidebar" className="drawer-overlay "></label>
+                <ul className="menu p-4 w-80 min-h-full text-base-content bg-[#7091E6]">
+                  {/* Sidebar content here */}
+                  <Link className="text-white text-xl font-semibold py-2"><li><a>Home</a></li></Link>
+                  <Link className="text-white text-xl font-semibold py-2"><li><a>Manage Users</a></li></Link>
+                  <Link className="text-white text-xl font-semibold py-2"><li><a>Manage Task</a></li></Link>
+
+                </ul>
+            </div>
+          </div>
+            )
+          }
         </>
       ):(
         <></>

@@ -11,6 +11,14 @@ import Register from './components/Register/Register.jsx';
 import Context from './Context/Context.jsx';
 import Login from './components/Login/Login.jsx';
 import Home from './components/Home/Home.jsx';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import WorkerDashboard from './components/Home/WorkerDashboard.jsx';
+import TaskCreatorDashboard from './components/Home/TaskCreatorDashboard.jsx';
+import AdminDashboard from './components/Home/AdminDashboard.jsx';
+import WorkerHome from './components/Worker/WorkerHome.jsx';
+import TaskCreatorHome from './components/TaskCreator/TaskCreatorHome.jsx';
+
+const queryClient = new QueryClient();
 
 const router = createBrowserRouter([
   {
@@ -30,16 +38,39 @@ const router = createBrowserRouter([
         element:<Login></Login>
       },
       {
-        
+        path:'/admindashboard',
+        element:<AdminDashboard></AdminDashboard>
       }
     ]
   },
+  {
+    path:'workerdashboard',
+    element:<WorkerDashboard></WorkerDashboard>,
+    children:[
+      {
+        path:"workerhome",
+        element:<WorkerHome></WorkerHome>
+      }
+    ]
+  },
+  {
+    path:'taskCreatordashboard',
+    element:<TaskCreatorDashboard></TaskCreatorDashboard>,
+    children:[
+      {
+        path:"taskcreatorhome",
+        element:<TaskCreatorHome></TaskCreatorHome>
+      }
+    ]
+  }
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <Context>
+    <QueryClientProvider client={queryClient}>
     <RouterProvider router={router} />
+    </QueryClientProvider>
     </Context>
   </React.StrictMode>,
 )

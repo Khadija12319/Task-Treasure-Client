@@ -9,6 +9,8 @@ import useAxiosPublic from "../Hooks/useAxiosPublic";
 import { ResetTv } from "@mui/icons-material";
 
 const Register= () =>{
+    const image_hosting_key=import.meta.env.VITE_IMAGE_HOSTING_KEY;
+    const image_hosting_api= `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
     const axiosPublic = useAxiosPublic();
     const {createUser,logInGoogle,user} = useContext(AuthContext);
     const [users ,setUser] = useState(null);
@@ -18,7 +20,7 @@ const Register= () =>{
     const location = useLocation();
     const navigate = useNavigate();
 
-    const handleLogin = e => {
+    const handleLogin = async(e) => {
         e.preventDefault();
         const formData = new FormData(e.target); 
         console.log(formData);
@@ -44,8 +46,20 @@ const Register= () =>{
             return;
         }
         const name =formData.get('name');
-        const photoURL =formData.get('photo');
+        const photoFile =formData.get('photo');
         const coins = role === 'worker' ? 10 : 50;
+        let photoURL = '';
+        if (photoFile) {
+            try {
+                const formData = new FormData();
+                formData.append('image', photoFile);
+                const res = await axiosPublic.post(image_hosting_api, formData);
+                photoURL = res.data.data.display_url;
+            } catch (error) {
+                setRegisterError("Failed to upload image");
+                return;
+            }
+        }
 
 
         if (email && password) {
@@ -154,7 +168,7 @@ const Register= () =>{
                             </div>
                             <div className="flex flex-col pb-3">
                                 <label className="text-black font-medium text-lg pb-2 pl-1">Photo URL</label>
-                                <input type="text" name="photo" placeholder="Your Photo Url" className="w-[80%] px-5 py-3 rounded-xl" required/>
+                                <input type="file" name="photo" placeholder="Your Photo Url" className=" file-input w-[80%] px-5 py-3 rounded-xl" required/>
                             </div>
                             <div className="flex flex-col">
                                 <label className="text-black font-medium text-lg pb-2 pl-1">Password</label>
