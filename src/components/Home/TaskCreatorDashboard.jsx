@@ -10,12 +10,16 @@ const TaskCreatorDashboard=() =>{
     const [coins,refetch]= useAxiosCoins();
     const [coin,setCoin]=useState(0);
   const [role,setRole]=useState(null);
+  const [image,setImage]=useState();
+  const [name,setName]=useState();
     useEffect(() => {
         if (user) {
           refetch();
           coins.map(co=>{
             setCoin(co.coins);
             setRole(co.role);
+            setImage(co.photo);
+            setName(co.name);
           }) // Fetch coins data when user is logged in
         }
       }, [user, refetch,coins]);
@@ -27,12 +31,16 @@ const TaskCreatorDashboard=() =>{
                     <Link to='/' className="btn btn-ghost text-2xl text-white"><GiTwoCoins className="text-yellow-500 text-3xl"/> TaskTreasure</Link>
                     </div>
                     <ul className="menu">
-                        <li><NavLink to='/taskCreatordashboard/taskcreatorhome' className="text-center flex items-center justify-center text-lg my-2">Home</NavLink></li>
+                        <li><NavLink to='taskCreatordashboard' className="text-center flex items-center justify-center text-lg my-2 text-white">Home</NavLink></li>
+                        <li><NavLink className="text-center flex items-center justify-center text-lg my-2 text-white">Add New Tasks</NavLink></li>
+                        <li><NavLink className="text-center flex items-center justify-center text-lg my-2 text-white">My Task's</NavLink></li>
+                        <li><NavLink className="text-center flex items-center justify-center text-lg my-2 text-white">Purchase Coin</NavLink></li>
+                        <li><NavLink className="text-center flex items-center justify-center text-lg my-2 text-white">Payment History</NavLink></li>
                     </ul>
                 </div>
                 <div className="flex-1">
                     <div className="flex justify-end my-2">
-                    <ul className="menu gap-10 lg:menu-horizontal rounded-box">
+                    <ul className="menu gap-10 lg:menu-horizontal rounded-box flex flex-col items-center">
   <li className="hover:bg-blue-400 hover:text-white hover:rounded-lg">
     <a className="text-lg">
       Available Coins
@@ -41,21 +49,21 @@ const TaskCreatorDashboard=() =>{
   </li>
   <li>
     <a>
-      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-      Updates
-      <span className="badge badge-sm badge-warning">NEW</span>
+    <div className="avatar w-12 rounded-full hover:rounded-full">
+    <div className="w-12 rounded-full">
+      <img src={image} alt="user image" />
+    </div>
+  </div>
     </a>
   </li>
-  <li>
-    <a>
-      Stats
-      <span className="badge badge-xs badge-info"></span>
+  <li className="hover:bg-blue-400 hover:text-white hover:rounded-lg">
+    <a className="text-lg">
+      {role}
     </a>
   </li>
-  <li>
-    <a>
-      Notification
-      <span className="badge badge-xs badge-info"></span>
+  <li className="hover:bg-blue-400 hover:text-white hover:rounded-lg">
+    <a className="text-lg">
+      {name}
     </a>
   </li>
 </ul>

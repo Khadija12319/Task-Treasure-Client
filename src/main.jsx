@@ -58,7 +58,7 @@ const router = createBrowserRouter([
     element:<TaskCreatorDashboard></TaskCreatorDashboard>,
     children:[
       {
-        path:"taskcreatorhome",
+        path:"taskCreatordashboard",
         element:<TaskCreatorHome></TaskCreatorHome>
       }
     ]
