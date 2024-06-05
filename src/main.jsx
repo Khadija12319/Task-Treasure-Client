@@ -17,6 +17,7 @@ import TaskCreatorDashboard from './components/Home/TaskCreatorDashboard.jsx';
 import AdminDashboard from './components/Home/AdminDashboard.jsx';
 import WorkerHome from './components/Worker/WorkerHome.jsx';
 import TaskCreatorHome from './components/TaskCreator/TaskCreatorHome.jsx';
+import AddTask from './components/TaskCreator/AddTask.jsx';
 
 const queryClient = new QueryClient();
 
@@ -60,6 +61,10 @@ const router = createBrowserRouter([
       {
         path:"taskCreatordashboard",
         element:<TaskCreatorHome></TaskCreatorHome>
+      },
+      {
+        path:'addtask',
+        element:<AddTask></AddTask>
       }
     ]
   }

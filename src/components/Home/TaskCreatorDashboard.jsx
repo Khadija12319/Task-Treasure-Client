@@ -32,7 +32,7 @@ const TaskCreatorDashboard=() =>{
                     </div>
                     <ul className="menu">
                         <li><NavLink to='taskCreatordashboard' className="text-center flex items-center justify-center text-lg my-2 text-white">Home</NavLink></li>
-                        <li><NavLink className="text-center flex items-center justify-center text-lg my-2 text-white">Add New Tasks</NavLink></li>
+                        <li><NavLink to='addtask' className="text-center flex items-center justify-center text-lg my-2 text-white">Add New Tasks</NavLink></li>
                         <li><NavLink className="text-center flex items-center justify-center text-lg my-2 text-white">My Task's</NavLink></li>
                         <li><NavLink className="text-center flex items-center justify-center text-lg my-2 text-white">Purchase Coin</NavLink></li>
                         <li><NavLink className="text-center flex items-center justify-center text-lg my-2 text-white">Payment History</NavLink></li>
