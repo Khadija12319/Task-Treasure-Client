@@ -104,9 +104,10 @@ function NavBar() {
     user? (
        <>
        <button className="btn btn-ghost"><RiCoinsFill className="text-2xl text-yellow-500"/> Available Coin <span>({coin})</span></button>
-    <Link><button className="btn btn-ghost">
+    <Link to='/user'><button className="btn btn-ghost">
       User Profile
     </button></Link>
+    
     <Link>
     <button className="btn btn-ghost" onClick={handleSignOut}>
       Logout

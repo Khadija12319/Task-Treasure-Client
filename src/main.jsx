@@ -14,10 +14,12 @@ import Home from './components/Home/Home.jsx';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import WorkerDashboard from './components/Home/WorkerDashboard.jsx';
 import TaskCreatorDashboard from './components/Home/TaskCreatorDashboard.jsx';
-import AdminDashboard from './components/Home/AdminDashboard.jsx';
+// import AdminDashboard from './components/Home/AdminDashboard.jsx';
 import WorkerHome from './components/Worker/WorkerHome.jsx';
 import TaskCreatorHome from './components/TaskCreator/TaskCreatorHome.jsx';
 import AddTask from './components/TaskCreator/AddTask.jsx';
+import User from './components/Home/User.jsx';
+
 
 const queryClient = new QueryClient();
 
@@ -39,9 +41,10 @@ const router = createBrowserRouter([
         element:<Login></Login>
       },
       {
-        path:'/admindashboard',
-        element:<AdminDashboard></AdminDashboard>
-      }
+        path:'/user',
+        element:<User></User>
+      },
+      
     ]
   },
   {

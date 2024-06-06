@@ -19,7 +19,6 @@ const Login= () =>{
         e.preventDefault();
         setLoginError(null);
         const formData = new FormData(e.target); 
-        console.log(formData);
         const email= formData.get('email');
         const password =formData.get('password');
 
