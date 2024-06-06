@@ -4,12 +4,15 @@ import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../Context/Context";
 import useAxiosCoins from "../Hooks/useAxiosCoins";
 import moment from "moment";
+import Swal from "sweetalert2";
+import useAxiosSecure from "../Hooks/useAxiosSecure";
 
 const AddTask =() =>{
     const {user}=useContext(AuthContext);
     const [coins,refetch]= useAxiosCoins();
     const image_hosting_key=import.meta.env.VITE_IMAGE_HOSTING_KEY;
     const image_hosting_api= `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
+    const axiosSecure = useAxiosSecure();
     const axiosPublic = useAxiosPublic();
     const [uploadError,setUploadError]=useState();
     const [creator_name,setCreatorName]=useState();
@@ -18,15 +21,18 @@ const AddTask =() =>{
     const [userId,setUserId]=useState();
     useEffect(() => {
         if (user) {
-          refetch();
-          coins.map(co=>{
-            setCreatorName(co.name);
-            setCreatorEmail(co.email);
-            setCoin(co.coins);
-            setUserId(co._id);
-          }) // Fetch coins data when user is logged in
+          refetch(); // Fetch coins data when user is logged in
         }
-      }, [user, refetch,coins]);
+      }, [user, refetch]);
+      useEffect(() => {
+        if (coins && coins.length > 0) {
+          const coinData = coins[0]; // Access the first element of the coins array
+          setCreatorName(coinData.name);
+          setCreatorEmail(coinData.email);
+          setCoin(coinData.coins);
+          setUserId(coinData._id);
+        }
+      }, [coins]);
       console.log(userId);
     const handleForm = async(e) =>{
         e.preventDefault();
@@ -58,7 +64,7 @@ const AddTask =() =>{
             }
         }
         const current_time=moment().format('LTS');
-        
+
         const formdata=
         {task_title:task_title,
         task_details:task_details,
@@ -72,6 +78,67 @@ const AddTask =() =>{
         current_time:current_time};
 
         const points=parseInt(task_count*payable_amount);
+
+        if(points>coin)
+            {
+                alert("Not available Coin. Purchase Coin");
+            }
+        else{
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                  confirmButton: "btn btn-success",
+                  cancelButton: "btn btn-danger"
+                },
+                buttonsStyling: false
+              });
+              swalWithBootstrapButtons.fire({
+                title: "Are you sure to add the data?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Yes, Add it!",
+                cancelButtonText: "No, cancel!",
+                reverseButtons: true
+              }).then((result) => {
+                if (result.isConfirmed) {
+                    axiosSecure.post('/tasks',formdata)
+                .then(res => {
+                    if(res.data.insertedId){
+                        console.log('task added to the database'); 
+                    if(userId){
+                        const newCoins = parseInt(coin - (task_count * payable_amount)); // Correct points calculation
+                        const point = { coins: newCoins };
+                            fetch(`http://localhost:5000/users/${userId}`, {
+                              method: 'PUT',
+                              headers: {
+                                'Content-Type': 'application/json'
+                              },
+                              body: JSON.stringify(point)
+                            })
+                            .then(res => res.json())
+                            .then(data => {console.log(data)
+                                      refetch();
+                            });
+                    }}
+                })
+                .catch()
+                  swalWithBootstrapButtons.fire({
+                    title: "Added!",
+                    text: "Your file has been Added to the Server.",
+                    icon: "success"
+                  });
+                } else if (
+                  /* Read more about handling dismissals below */
+                  result.dismiss === Swal.DismissReason.cancel
+                ) {
+                  swalWithBootstrapButtons.fire({
+                    title: "Cancelled!",
+                    text: "Your information is not added)",
+                    icon: "error"
+                  });
+                }
+              });
+        }
         
     }
     return(
