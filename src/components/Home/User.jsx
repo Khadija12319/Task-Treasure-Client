@@ -13,7 +13,7 @@ const User= () =>{
                     <div className="space-y-4 pr-8 flex-1">
                         <h2 className="md:text-3xl text-xl font-bold">Name: <span className="font-medium md:text-2xl">{user?.displayName}</span></h2>
                         <h2 className="md:text-3xl text-xl font-bold">Email: <span className="font-medium md:text-2xl">{user?.email}</span></h2>
-                        <h2 className="md:text-3xl text-xl font-bold">Photo Url: <span className="font-medium md:text-2xl max-w-xs break-all">{user.photoURL}</span></h2>
+                        <h2 className="md:text-3xl text-xl font-bold">Photo Url: <span className="font-medium md:text-2xl max-w-xs break-all">{user?.photoURL}</span></h2>
                     </div>
                 </div>
             </div>

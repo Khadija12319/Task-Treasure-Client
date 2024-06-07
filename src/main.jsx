@@ -20,6 +20,7 @@ import TaskCreatorHome from './components/TaskCreator/TaskCreatorHome.jsx';
 import AddTask from './components/TaskCreator/AddTask.jsx';
 import User from './components/Home/User.jsx';
 import MyTasks from './components/TaskCreator/MyTasks.jsx';
+import PrivateRoute from "./PrivateRoute/PrivateRoute.jsx";
 
 
 const queryClient = new QueryClient();
@@ -53,26 +54,26 @@ const router = createBrowserRouter([
     element:<WorkerDashboard></WorkerDashboard>,
     children:[
       {
-        path:"workerhome",
+        path:"",
         element:<WorkerHome></WorkerHome>
       }
     ]
   },
   {
     path:'taskCreatordashboard',
-    element:<TaskCreatorDashboard></TaskCreatorDashboard>,
+    element:<PrivateRoute><TaskCreatorDashboard></TaskCreatorDashboard></PrivateRoute>,
     children:[
       {
-        path:"taskCreatordashboard",
-        element:<TaskCreatorHome></TaskCreatorHome>
+        path:"",
+        element:<PrivateRoute><TaskCreatorHome></TaskCreatorHome></PrivateRoute>
       },
       {
         path:'addtask',
-        element:<AddTask></AddTask>
+        element:<PrivateRoute><AddTask></AddTask></PrivateRoute>
       },
       {
         path:'mytasks',
-        element:<MyTasks></MyTasks>
+        element:<PrivateRoute><MyTasks></MyTasks></PrivateRoute>
       }
     ]
   }
@@ -82,7 +83,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <Context>
     <QueryClientProvider client={queryClient}>
-    <RouterProvider router={router} />
+      <RouterProvider router={router} />
     </QueryClientProvider>
     </Context>
   </React.StrictMode>,

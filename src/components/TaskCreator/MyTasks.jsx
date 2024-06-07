@@ -16,18 +16,21 @@ const MyTasks = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [task,setTasks]=useState();
+    const [coin,setCoin]=useState();
 
     useEffect(() => {
         if (user) {
-            refetch(); // Fetch coins data when user is logged in
+            refetch();
+            refetchtask(); // Fetch coins data when user is logged in
         }
-    }, [user, refetch]);
+    }, [user, refetch,refetchtask]);
 
     useEffect(() => {
         if (coins && coins.length > 0) {
             const coinData = coins[0]; // Access the first element of the coins array
             setCreatorEmail(coinData.email);
             setUserId(coinData._id);
+            setCoin(coinData.coins);
         }
     }, [coins]);
 
@@ -91,6 +94,61 @@ const MyTasks = () => {
         }
     };
 
+    const handleDelete = async (task) => {
+        const swalWithBootstrapButtons = Swal.mixin({
+          customClass: {
+            confirmButton: "btn btn-success",
+            cancelButton: "btn btn-danger"
+          },
+          buttonsStyling: false
+        });
+        
+        try {
+          const result = await swalWithBootstrapButtons.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes, delete it!",
+            cancelButtonText: "No, cancel!",
+            reverseButtons: true
+          });
+      
+          if (result.isConfirmed) {
+            const newCoins = parseInt(coin + (task.task_count * task.payable_amount));
+            await axiosSecure.delete(`/tasks/${task._id}`);
+            const point = { coins: newCoins };
+            
+            const response = await fetch(`http://localhost:5000/users/${userId}`, {
+              method: 'PUT',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(point)
+            });
+            
+            const data = await response.json();
+            console.log(data);
+            refetch();
+            refetchtask();         
+            swalWithBootstrapButtons.fire({
+              title: "Deleted!",
+              text: "Your file has been deleted.",
+              icon: "success"
+            });
+          } else if (result.dismiss === Swal.DismissReason.cancel) {
+            swalWithBootstrapButtons.fire({
+              title: "Cancelled",
+              text: "Your imaginary file is safe :)",
+              icon: "error"
+            });
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      };
+      
+
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error}</div>;
 
@@ -120,7 +178,7 @@ const MyTasks = () => {
                                         <td className="text-center">{task.payable_amount}</td>
                                         <td className="space-x-5 text-center">
                                             <button className="btn btn-primary" onClick={() => handleShowModal(task)}>Update</button>
-                                            <button className="btn btn-primary">Delete</button>
+                                            <button className="btn btn-primary" onClick={() => handleDelete(task)}>Delete</button>
                                         </td>
                                     </tr>
                                 ))
