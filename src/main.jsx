@@ -21,6 +21,8 @@ import AddTask from './components/TaskCreator/AddTask.jsx';
 import User from './components/Home/User.jsx';
 import MyTasks from './components/TaskCreator/MyTasks.jsx';
 import PrivateRoute from "./PrivateRoute/PrivateRoute.jsx";
+import MyList from './components/Worker/MyList.jsx';
+import TaskDetails from './components/Worker/TaskDetails.jsx';
 
 
 const queryClient = new QueryClient();
@@ -56,6 +58,15 @@ const router = createBrowserRouter([
       {
         path:"",
         element:<WorkerHome></WorkerHome>
+      },
+      {
+        path:"mylist",
+        element:<MyList></MyList>
+      },
+      {
+        path:'mylist/:id',
+        element:<PrivateRoute><TaskDetails></TaskDetails></PrivateRoute>,
+        loader: ({params}) => fetch(`http://localhost:5000/tasks/${params.id}`)
       }
     ]
   },
