@@ -33,7 +33,7 @@ const WorkerDashboard=() =>{
                     <ul className="menu">
                         <li><Link to='' className="text-center flex items-center justify-center text-lg my-2 text-white">Home</Link></li>
                         <li><NavLink to='mylist' className="text-center flex items-center justify-center text-lg my-2 text-white">Task List</NavLink></li>
-                        <li><NavLink  className="text-center flex items-center justify-center text-lg my-2 text-white">My Submissions</NavLink></li>
+                        <li><NavLink to='mysubmissions' className="text-center flex items-center justify-center text-lg my-2 text-white">My Submissions</NavLink></li>
                         <li><NavLink className="text-center flex items-center justify-center text-lg my-2 text-white">WithDrawals</NavLink></li>
                     </ul>
                 </div>

@@ -13,18 +13,22 @@ const Context = ({children}) => {
 
     const createUser = (email, password) => {
         setLoading(true);
-        return createUserWithEmailAndPassword(auth,email,password);
+        return createUserWithEmailAndPassword(auth,email,password)
+        .finally(() => setLoading(false));
     }
 
     const logInUser= (email,password) =>{
         setLoading(true);
-        return signInWithEmailAndPassword(auth,email,password);
+        return signInWithEmailAndPassword(auth,email,password)
+        .finally(() => setLoading(false));
     }
 
     const logOut = () =>{
         setLoading(true);
         return signOut(auth)
+        .finally(() => setLoading(false));
     }
+
     useEffect(()=> {
        const unSubscribe = onAuthStateChanged(auth, currentUser => {
             setUser(currentUser);
@@ -37,7 +41,8 @@ const Context = ({children}) => {
 
     const logInGoogle = () =>{
         setLoading(true);
-        return signInWithPopup(auth, Provider);
+        return signInWithPopup(auth, Provider)
+        .finally(() => setLoading(false));
     }
 
     const updateUserProfile = (displayName, photoURL) => {
@@ -52,7 +57,7 @@ const Context = ({children}) => {
     const authKey={user,loading,createUser,logOut,logInUser,logInGoogle, updateUserProfile,auth};
     return (
         <AuthContext.Provider value={authKey}>
-            {children}
+            {!loading ? children : <div>Loading...</div>}
         </AuthContext.Provider>
     );
 };
