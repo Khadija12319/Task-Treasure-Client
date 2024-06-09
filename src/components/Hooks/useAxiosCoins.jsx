@@ -10,7 +10,6 @@ const useAxiosCoins= () =>{
         queryKey:['coins',user?.email],
         queryFn: async() => {
             const res =await axiosSecure.get(`/users/${user.email}`);
-            console.log(res.data);
             return res.data;
         },
         enabled: !!user?.email,

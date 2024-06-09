@@ -21,10 +21,9 @@ const MyTasks = () => {
     useEffect(() => {
         if (user) {
             refetch();
-            refetchtask(); // Fetch coins data when user is logged in
         }
-    }, [user, refetch,refetchtask]);
-
+    }, [user, refetch]);
+    
     useEffect(() => {
         if (coins && coins.length > 0) {
             const coinData = coins[0]; // Access the first element of the coins array
@@ -33,12 +32,12 @@ const MyTasks = () => {
             setCoin(coinData.coins);
         }
     }, [coins]);
-
+    
     useEffect(() => {
         if (userId) {
             const fetchTasks = async () => {
                 try {
-                    const response = await axiosSecure.get(`/tasks/${userId}`);
+                    const response = await axiosSecure.get(`/tasks/${creator_email}`);
                     setTasks(response.data);
                 } catch (err) {
                     setError(err.message);
@@ -48,7 +47,8 @@ const MyTasks = () => {
             };
             fetchTasks();
         }
-    }, [userId, axiosSecure]);
+    }, [userId, axiosSecure,creator_email]);
+    
 
     const [showModal, setShowModal] = useState(false);
     const [currentTask, setCurrentTask] = useState(null);

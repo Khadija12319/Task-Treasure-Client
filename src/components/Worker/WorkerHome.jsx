@@ -4,18 +4,33 @@ import { AuthContext } from "../../Context/Context";
 import useAxiosCoins from "../Hooks/useAxiosCoins";
 import { PiCoinBold } from "react-icons/pi";
 import { FaDollarSign, FaTasks } from "react-icons/fa";
+import useAxiosSecure from "../Hooks/useAxiosSecure";
 const WorkerHome=() =>{
     const {user} =useContext(AuthContext);
     const [coins,refetch]= useAxiosCoins();
     const [coin,setCoin]=useState(0);
+    const [email,setEmail]=useState();
+    const axiosSecure = useAxiosSecure();
+    const [tasks,setTasks]=useState([]);
+
         useEffect(() => {
             if (user) {
               refetch();
               coins.map(co=>{
                 setCoin(co.coins);
+                setEmail(co.email);
               }) // Fetch coins data when user is logged in
+                const fetchData = async() =>{
+                const tasksResponse = await axiosSecure.get(`/submissions/${email}`);
+                setTasks(tasksResponse.data);
+              }
+              fetchData();
+              refetch();
             }
-          }, [user, refetch,coins]);
+
+          }, [user, refetch,coins,refetch()]);
+
+
     return(
 
         <>
@@ -40,7 +55,7 @@ const WorkerHome=() =>{
                   <FaTasks className="inline-block w-8 h-8 stroke-current"/>
                 </div>
                 <div className="stat-title">Total Task</div>
-                <div className="stat-value text-secondary">2.6M</div>
+                <div className="stat-value text-secondary">{tasks.length}</div>
                 <div className="stat-desc">Submitted by You</div>
               </div>
 
