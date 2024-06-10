@@ -6,6 +6,8 @@ import { PiCoinBold } from "react-icons/pi";
 import { MdPendingActions } from "react-icons/md";
 import { FaDollarSign } from "react-icons/fa";
 import useAxiosSecure from "../Hooks/useAxiosSecure";
+import Swal from "sweetalert2";
+import { reload } from "firebase/auth";
 const TaskCreatorHome=() =>{
     const {user} =useContext(AuthContext);
     const [coins,refetch]= useAxiosCoins();
@@ -63,6 +65,65 @@ const [formData, setFormData] = useState({ task_title: '',  submission_details: 
 const handleCloseModal = () => {
   setShowModal(false);
   setCurrentTask(null);
+};
+
+const handleApprove = async (task) => {
+  try {
+      // Increase payable amount coins for the worker
+      const data=await axiosSecure.get(`/users/${task.worker_email}`);
+      const usercoin=data.data[0].coins;
+      const newCoins = usercoin + task.payable_amount;
+      const point = { coins: newCoins };
+      await axiosSecure.put(`/users/${task.worker_email}`, point);
+
+      // Update submission status to "approve" in the submission collection
+      await axiosSecure.put(`/submissions/${task._id}`, { status: "approved" });
+
+      // Show success message
+      Swal.fire({
+          icon: 'success',
+          title: 'Task Approved!',
+          text: 'Payable amount coins increased and submission status updated to "approve".',
+          showConfirmButton: false,
+          timer: 1500
+      });
+
+      // Refetch data
+      setPendingTasks(pendingtasks => pendingtasks.filter(t => t._id !== task._id));
+  } catch (error) {
+      console.error('Error approving task:', error);
+      Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Something went wrong!',
+      });
+  }
+};
+
+const handleReject = async (task) => {
+  try {
+      // Update submission status to "rejected" in the submission collection
+      await axiosSecure.put(`/submissions/${task._id}`, { status: "rejected" });
+
+      // Show success message
+      Swal.fire({
+          icon: 'success',
+          title: 'Task Rejected!',
+          text: 'Submission status updated to "rejected".',
+          showConfirmButton: false,
+          timer: 1500
+      });
+
+      // Refetch data
+      setPendingTasks(pendingtasks => pendingtasks.filter(t => t._id !== task._id));
+  } catch (error) {
+      console.error('Error rejecting task:', error);
+      Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Something went wrong!',
+      });
+  }
 };
 
 
@@ -138,8 +199,8 @@ const handleCloseModal = () => {
                            View Submission
                            </button></td>
                          <td className="text-center space-x-4">
-                           <button className="btn btn-primary">Approve</button>
-                           <button className="btn btn-primary">Reject</button>
+                           <button className="btn btn-primary" onClick={() => handleApprove(task)}>Approve</button>
+                           <button className="btn btn-primary" onClick={() => handleReject(task)}>Reject</button>
                          </td>
                      </tr>
                  ))

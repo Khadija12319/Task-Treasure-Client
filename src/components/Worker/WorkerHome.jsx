@@ -12,6 +12,28 @@ const WorkerHome=() =>{
     const [email,setEmail]=useState();
     const axiosSecure = useAxiosSecure();
     const [tasks,setTasks]=useState([]);
+    const [approvedtasks,setApprovedTasks]=useState([]); 
+    const [approvedTasksCoinSum, setApprovedTasksCoinSum] = useState(0);
+    useEffect(() => {
+      const fetchData = async () => {
+          try {
+              if (user) {
+                  refetch();
+                  const res = await axiosSecure.get(`/submissions/${user.email}`);
+                  setTasks(res.data);
+              }
+          } catch (error) {
+              console.error(error);
+          }
+      };
+  
+      fetchData(); // Call fetchData when the component mounts
+  
+      // Cleanup function to avoid memory leaks
+      return () => {
+          // Add cleanup logic if needed
+      };
+  }, [user, refetch, axiosSecure]);
 
         useEffect(() => {
             if (user) {
@@ -28,7 +50,18 @@ const WorkerHome=() =>{
               refetch();
             }
 
-          }, [user, refetch,coins,refetch()]);
+          }, [user, refetch,coins,refetch(),axiosSecure,email]);
+          useEffect(() => {
+            if (tasks.length > 0) {
+                const pendingTasksList = tasks.filter(task => task.status === 'approved');
+                setApprovedTasks(pendingTasksList);
+                const coinSum = pendingTasksList.reduce((total, task) => {
+                  return total + task.payable_amount;
+              }, 0);
+      
+              setApprovedTasksCoinSum(coinSum);
+            }
+        }, [tasks]);
 
 
     return(
@@ -64,7 +97,7 @@ const WorkerHome=() =>{
                     <FaDollarSign className="inline-block w-8 h-8 stroke-current"/>
 
                 </div>
-                <div className="stat-value">86%</div>
+                <div className="stat-value">{approvedTasksCoinSum}</div>
                 <div className="stat-title">Total Earning</div>
                 <div className="stat-desc text-secondary">Paid after task approved</div>
               </div>
@@ -83,14 +116,25 @@ const WorkerHome=() =>{
             <thead>
               <tr>
                 <th></th>
-                <th className="text-lg text-primary">Task Title</th>
-                <th className="text-lg text-primary">Payable Amount</th>
-                <th className="text-lg text-primary">Creator Name</th>
-                <th  className="text-lg text-primary">Status</th>
+                <th className="text-lg text-center text-primary">Task Title</th>
+                <th className="text-lg text-center text-primary">Payable Amount</th>
+                <th className="text-lg text-center text-primary">Creator Name</th>
+                <th  className="text-lg text-center text-primary">Status</th>
               </tr>
             </thead>
             <tbody>
-              
+            {
+                 approvedtasks.map((task, index) => (
+                     <tr key={task._id}>
+                         <td className="text-center mx-auto">{index + 1}</td>
+                         <td className="text-center">{task.task_title}</td>
+                         <td className="text-center">{task.payable_amount}</td>
+                         <td className="text-center">{task.creator_name}</td>
+                         <td className="text-center">{task.status}</td>
+                        
+                     </tr>
+                 ))
+            }
             </tbody>
           </table>
         </div>
