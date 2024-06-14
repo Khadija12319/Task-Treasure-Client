@@ -24,6 +24,7 @@ const AddTask =() =>{
           refetch(); // Fetch coins data when user is logged in
         }
       }, [user, refetch]);
+
       useEffect(() => {
         if (coins && coins.length > 0) {
           const coinData = coins[0]; // Access the first element of the coins array
@@ -34,7 +35,8 @@ const AddTask =() =>{
         }
       }, [coins]);
       console.log(userId);
-    const handleForm = async(e) =>{
+
+    const handleForm = async (e) =>{
         e.preventDefault();
         const formData = new FormData(e.target);
 
@@ -83,62 +85,68 @@ const AddTask =() =>{
             {
                 alert("Not available Coin. Purchase Coin");
             }
-        else{
-            const swalWithBootstrapButtons = Swal.mixin({
-                customClass: {
-                  confirmButton: "btn btn-success",
-                  cancelButton: "btn btn-danger"
-                },
-                buttonsStyling: false
-              });
-              swalWithBootstrapButtons.fire({
-                title: "Are you sure to add the data?",
-                text: "You won't be able to revert this!",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonText: "Yes, Add it!",
-                cancelButtonText: "No, cancel!",
-                reverseButtons: true
-              }).then((result) => {
-                if (result.isConfirmed) {
-                    axiosSecure.post('/tasks',formdata)
-                .then(res => {
-                    if(res.data.insertedId){
-                        console.log('task added to the database'); 
-                    if(userId){
-                        const newCoins = parseInt(coin - (task_count * payable_amount)); // Correct points calculation
-                        const point = { coins: newCoins };
-                            fetch(`http://localhost:5000/users/${userId}`, {
-                              method: 'PUT',
-                              headers: {
-                                'Content-Type': 'application/json'
-                              },
-                              body: JSON.stringify(point)
-                            })
-                            .then(res => res.json())
-                            .then(data => {console.log(data)
-                                      refetch();
-                            });
-                    }}
-                })
-                .catch()
-                  swalWithBootstrapButtons.fire({
-                    title: "Added!",
-                    text: "Your file has been Added to the Server.",
-                    icon: "success"
-                  });
-                } else if (
-                  /* Read more about handling dismissals below */
-                  result.dismiss === Swal.DismissReason.cancel
-                ) {
-                  swalWithBootstrapButtons.fire({
-                    title: "Cancelled!",
-                    text: "Your information is not added)",
-                    icon: "error"
-                  });
-                }
-              });
-        }
+            else {
+                const swalWithBootstrapButtons = Swal.mixin({
+                  customClass: {
+                    confirmButton: "btn btn-success",
+                    cancelButton: "btn btn-danger"
+                  },
+                  buttonsStyling: false
+                });
+                swalWithBootstrapButtons.fire({
+                  title: "Are you sure to add the data?",
+                  text: "You won't be able to revert this!",
+                  icon: "warning",
+                  showCancelButton: true,
+                  confirmButtonText: "Yes, Add it!",
+                  cancelButtonText: "No, cancel!",
+                  reverseButtons: true
+                }).then(async (result) => { // Make the callback function async
+                  if (result.isConfirmed) {
+                    try {
+                      const res = await axiosSecure.post('/tasks', formdata);
+                      if (res.data.insertedId) {
+                        console.log('Task added to the database');
+                        if (userId) {
+                          const newCoins = parseInt(coin - (task_count * payable_amount)); // Correct points calculation
+                          const point = { coins: newCoins };
+                          const updateRes = await fetch(`http://localhost:5000/users/${userId}`, {
+                            method: 'PUT',
+                            headers: {
+                              'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(point)
+                          });
+                          const data = await updateRes.json();
+                          console.log(data);
+                          refetch();
+                        }
+                      }
+                      swalWithBootstrapButtons.fire({
+                        title: "Added!",
+                        text: "Your file has been Added to the Server.",
+                        icon: "success"
+                      });
+                    } catch (error) {
+                      console.error('Error:', error);
+                      swalWithBootstrapButtons.fire({
+                        title: "Error!",
+                        text: "Something went wrong. Please try again later.",
+                        icon: "error"
+                      });
+                    }
+                  } else if (
+                    result.dismiss === Swal.DismissReason.cancel
+                  ) {
+                    swalWithBootstrapButtons.fire({
+                      title: "Cancelled!",
+                      text: "Your information is not added)",
+                      icon: "error"
+                    });
+                  }
+                });
+              }
+              
         
     }
     return(
