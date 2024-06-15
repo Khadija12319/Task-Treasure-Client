@@ -25,6 +25,7 @@ import MyList from './components/Worker/MyList.jsx';
 import TaskDetails from './components/Worker/TaskDetails.jsx';
 import MySubmissions from './components/Worker/MySubmissions.jsx';
 import Purchase from './components/TaskCreator/Purchase.jsx';
+import PaymentHistory from './components/TaskCreator/PaymentHistory.jsx';
 
 
 const queryClient = new QueryClient();
@@ -95,6 +96,10 @@ const router = createBrowserRouter([
       {
         path:'purchase',
         element:<PrivateRoute><Purchase></Purchase></PrivateRoute>
+      },
+      {
+        path:'history',
+        element:<PrivateRoute><PaymentHistory></PaymentHistory></PrivateRoute>
       }
     ]
   }
