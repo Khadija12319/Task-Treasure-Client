@@ -26,6 +26,7 @@ import TaskDetails from './components/Worker/TaskDetails.jsx';
 import MySubmissions from './components/Worker/MySubmissions.jsx';
 import Purchase from './components/TaskCreator/Purchase.jsx';
 import PaymentHistory from './components/TaskCreator/PaymentHistory.jsx';
+import Withdrawals from './components/Worker/Withdrawals.jsx';
 
 
 const queryClient = new QueryClient();
@@ -74,6 +75,10 @@ const router = createBrowserRouter([
       {
         path:'mysubmissions',
         element:<MySubmissions></MySubmissions>
+      },
+      {
+        path:'withdraw',
+        element:<PrivateRoute><Withdrawals></Withdrawals></PrivateRoute>
       }
     ]
   },

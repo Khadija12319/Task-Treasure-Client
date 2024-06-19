@@ -159,7 +159,7 @@ const AddTask =() =>{
                 <div className="w-[80%] mx-auto my-10">
                     <form className="w-[100%]" onSubmit={handleForm}>
                         {/* task title & task details */}
-                        <div className="flex  gap-6 justify-between">
+                        <div className="flex gap-6 justify-between">
                             <div className="flex flex-col gap-3 w-full">
                                 <label>Task Title</label>
                                 <input type="text" placeholder="Type Task Title" name="task_title" className="input input-bordered w-full" />

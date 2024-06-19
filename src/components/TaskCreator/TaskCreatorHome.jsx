@@ -7,7 +7,6 @@ import { MdPendingActions } from "react-icons/md";
 import { FaDollarSign } from "react-icons/fa";
 import useAxiosSecure from "../Hooks/useAxiosSecure";
 import Swal from "sweetalert2";
-import { reload } from "firebase/auth";
 const TaskCreatorHome=() =>{
     const {user} =useContext(AuthContext);
     const [coins,refetch]= useAxiosCoins();
@@ -15,7 +14,8 @@ const TaskCreatorHome=() =>{
     const [taskemail,setTaskEmail]=useState();
     const axiosSecure=useAxiosSecure();
     const [tasks,setTasks]=useState([]);
-    const [pendingtasks,setPendingTasks]=useState([]);  
+    const [pendingtasks,setPendingTasks]=useState([]); 
+    const [totalAmount, setTotalAmount] = useState(0); 
     useEffect(() => {
       const fetchData = async () => {
           try {
@@ -38,12 +38,16 @@ const TaskCreatorHome=() =>{
   }, [user, refetch, axiosSecure]);
   
   useEffect(() => {
-      // Update coin state when coins data changes
+    const updateCoinState = async () => {
       if (coins && coins.length > 0) {
-          const coinValue = coins[0].coins;
-          setCoin(coinValue);
+        const coinValue = coins[0].coins;
+        setCoin(coinValue);
       }
+    };
+
+    updateCoinState();
   }, [coins]);
+  console.log(coin);
 
   useEffect(() => {
     if (tasks.length > 0) {
@@ -51,6 +55,27 @@ const TaskCreatorHome=() =>{
         setPendingTasks(pendingTasksList);
     }
 }, [tasks]);
+
+console.log(pendingtasks);
+
+useEffect(() => {
+    const fetchTasks = async () => {
+        if (user) {
+            try {
+                const res = await axiosSecure.get(`/payments/${user.email}`);
+                const payments = res.data;
+                console.log(payments)
+
+                // Calculate total amount
+                const total = payments.reduce((acc, payment) => acc + payment.amount, 0);
+                setTotalAmount(total);
+            } catch (error) {
+                console.error('Error fetching payment history:', error);
+            }
+        }
+    };
+    fetchTasks();
+},[user,axiosSecure])
 
 
 const [showModal, setShowModal] = useState(false);
@@ -71,10 +96,14 @@ const handleApprove = async (task) => {
   try {
       // Increase payable amount coins for the worker
       const data=await axiosSecure.get(`/users/${task.worker_email}`);
+      console.log(data);
       const usercoin=data.data[0].coins;
+      console.log(usercoin);
       const newCoins = usercoin + task.payable_amount;
+      console.log(newCoins);
       const point = { coins: newCoins };
-      await axiosSecure.put(`/users/${task.worker_email}`, point);
+      await axiosSecure.put(`/users/${task.worker_email}`, point)
+      .then(data =>console.log(data))
 
       // Update submission status to "approve" in the submission collection
       await axiosSecure.put(`/submissions/${task._id}`, { status: "approved" });
@@ -160,7 +189,7 @@ const handleReject = async (task) => {
         <FaDollarSign className="inline-block w-8 h-8 stroke-current"/>
       
     </div>
-    <div className="stat-value">86%</div>
+    <div className="stat-value">{totalAmount}</div>
     <div className="stat-title">Total Payment</div>
     <div className="stat-desc text-secondary">Paid by User</div>
   </div>
