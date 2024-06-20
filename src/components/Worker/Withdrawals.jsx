@@ -72,6 +72,7 @@ const Withdrawals = () =>{
         worker_name:worker_name,
         withdraw_coin:withdraw_coin,
         withdraw_amount:parseInt(withdraw_amount),
+        account_number:account,
         payment_system:payment_system,
         withdraw_time:current_time};
 
@@ -99,20 +100,6 @@ const Withdrawals = () =>{
                   const res = await axiosSecure.post('/withdraws', formdata);
                   if (res.data.insertedId) {
                     console.log('withdraw added to the database');
-                    if (userId) {
-                      const newCoins = parseInt(remaining); // Correct points calculation
-                      const point = { coins: newCoins };
-                      const updateRes = await fetch(`http://localhost:5000/users/${userId}`, {
-                        method: 'PUT',
-                        headers: {
-                          'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(point)
-                      });
-                      const data = await updateRes.json();
-                      console.log(data);
-                      refetch();
-                    }
                   }
                   swalWithBootstrapButtons.fire({
                     title: "Added!",

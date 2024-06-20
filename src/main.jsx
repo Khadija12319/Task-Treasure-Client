@@ -27,6 +27,9 @@ import MySubmissions from './components/Worker/MySubmissions.jsx';
 import Purchase from './components/TaskCreator/Purchase.jsx';
 import PaymentHistory from './components/TaskCreator/PaymentHistory.jsx';
 import Withdrawals from './components/Worker/Withdrawals.jsx';
+import AdminDashboard from './components/Admin/AdminDashboard.jsx';
+import AdminHome from './components/Admin/AdminHome.jsx';
+import AdminManageUsers from './components/Admin/AdminManageUsers.jsx';
 
 
 const queryClient = new QueryClient();
@@ -105,6 +108,19 @@ const router = createBrowserRouter([
       {
         path:'history',
         element:<PrivateRoute><PaymentHistory></PaymentHistory></PrivateRoute>
+      }
+    ]
+  },
+  {
+    path:'admindashboard',
+    element:<PrivateRoute><AdminDashboard></AdminDashboard></PrivateRoute>,
+    children:[
+      {
+        path:"",
+        element:<AdminHome></AdminHome>
+      },{
+        path:'manageUsers',
+        element:<PrivateRoute><AdminManageUsers></AdminManageUsers></PrivateRoute>
       }
     ]
   }

@@ -103,7 +103,6 @@ const handleApprove = async (task) => {
       console.log(newCoins);
       const point = { coins: newCoins };
       await axiosSecure.put(`/users/${task.worker_email}`, point)
-      .then(data =>console.log(data))
 
       // Update submission status to "approve" in the submission collection
       await axiosSecure.put(`/submissions/${task._id}`, { status: "approved" });

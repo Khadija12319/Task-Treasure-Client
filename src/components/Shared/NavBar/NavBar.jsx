@@ -57,24 +57,11 @@ function NavBar() {
             )
           }
           {
-            role==="admin" &&(
-              <div className="drawer z-10 ">
-              <input id="my-drawer" type="checkbox" className="drawer-toggle" />
-              <div className="drawer-content">
-                {/* Page content here */}
-                <label htmlFor="my-drawer" className="btn btn-primary drawer-button"><MdOutlineMenuOpen className="text-2xl"  /></label>
-              </div> 
-              <div className="drawer-side ">
-                <label htmlFor="my-drawer" aria-label="close sidebar" className="drawer-overlay "></label>
-                <ul className="menu p-4 w-80 min-h-full text-base-content bg-[#7091E6]">
-                  {/* Sidebar content here */}
-                  <Link className="text-white text-xl font-semibold py-2"><li><a>Home</a></li></Link>
-                  <Link className="text-white text-xl font-semibold py-2"><li><a>Manage Users</a></li></Link>
-                  <Link className="text-white text-xl font-semibold py-2"><li><a>Manage Task</a></li></Link>
-
-                </ul>
-            </div>
-          </div>
+            role==="Admin" &&(
+              <>
+              <Link to='/admindashboard'>
+              <label htmlFor="my-drawer" className="btn btn-primary drawer-button"><MdOutlineMenuOpen className="text-2xl"/></label></Link>
+              </>
             )
           }
         </>
