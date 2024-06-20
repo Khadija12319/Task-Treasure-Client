@@ -7,6 +7,8 @@ import { Link } from "react-router-dom";
 const MyList = () =>{
     const axiosSecure=useAxiosSecure();
     const [tasks,setTasks]=useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const tasksPerPage = 6;
     useEffect(() => {
         const fetchtasks = async() =>{
             const res =await axiosSecure.get('/tasks');
@@ -14,7 +16,29 @@ const MyList = () =>{
         }
         fetchtasks();
     }, [axiosSecure]);
-    console.log(tasks);
+    // Get current tasks
+  const indexOfLastTask = currentPage * tasksPerPage;
+  const indexOfFirstTask = indexOfLastTask - tasksPerPage;
+  const currentTasks = tasks.slice(indexOfFirstTask, indexOfLastTask);
+
+  // Change page
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  // Calculate total pages
+  const totalPages = Math.ceil(tasks.length / tasksPerPage);
+
+  // Handle next and previous buttons
+  const handleNext = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handlePrev = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
     return(
         <>
         <div className="mb-20">
@@ -23,7 +47,7 @@ const MyList = () =>{
             <div>
                 <div className="mx-20 grid grid-cols-3 gap-5">
                 {
-                    tasks.map(task => (
+                    currentTasks.map(task => (
                         <div className="card shadow-xl bg-[#EDE8F5]" key={task._id}>
                             <figure><img src={task.task_img_url} alt="task image" className="h-64 w-full"/></figure>
                             <div className="card-body">
@@ -53,9 +77,30 @@ const MyList = () =>{
                         </div>
                     ))
                 }
-
-
                 </div>
+          <div className="flex justify-center mt-10">
+            <nav>
+              <ul className="pagination flex gap-4">
+                <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+                  <button onClick={handlePrev} className="page-link btn btn-primary" disabled={currentPage === 1}>
+                    Prev
+                  </button>
+                </li>
+                {[...Array(totalPages).keys()].map(number => (
+                  <li key={number + 1} className={`page-item ${number + 1 === currentPage ? 'active' : ''} `}>
+                    <button onClick={() => paginate(number + 1)} className="page-link btn btn-primary">
+                      {number + 1}
+                    </button>
+                  </li>
+                ))}
+                <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
+                  <button onClick={handleNext} className="page-link btn btn-primary" disabled={currentPage === totalPages}>
+                    Next
+                  </button>
+                </li>
+              </ul>
+            </nav>
+          </div>
             </div>
         </div>
         </>
