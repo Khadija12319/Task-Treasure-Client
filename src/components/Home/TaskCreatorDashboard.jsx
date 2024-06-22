@@ -4,6 +4,7 @@ import Footer from "../Shared/Footer/Footer"
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../Context/Context";
 import useAxiosCoins from "../Hooks/useAxiosCoins";
+import { FaBell } from "react-icons/fa";
 
 const TaskCreatorDashboard=() =>{
     const {user} =useContext(AuthContext);
@@ -66,6 +67,7 @@ const TaskCreatorDashboard=() =>{
       {name}
     </a>
   </li>
+  <button className="btn mr-5"><FaBell className="text-3xl"/></button>
 </ul>
                     </div>
                     <Outlet></Outlet>

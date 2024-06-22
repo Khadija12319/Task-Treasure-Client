@@ -4,7 +4,7 @@
 ## Live url
 
  - [Website](https://delicate-dasik-7c5671.netlify.app/)
- #### Admin Email:admin@gmail.com
+ #### Admin UserName:Admin
  #### Admin Password:aAbB21!@
 
 The TaskTreasure platform is designed to provide users with opportunities to complete small tasks and earn rewards. The platform supports three distinct roles: Worker, Task-Creator, and Admin, each tailored with specific functionalities to ensure seamless task management, task creation, and platform administration.
