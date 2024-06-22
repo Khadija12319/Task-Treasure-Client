@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext, useEffect } from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import './index.css'
@@ -8,7 +8,7 @@ import {
 } from "react-router-dom";
 import ErrorPage from './components/ErrorPage/ErrorPage.jsx';
 import Register from './components/Register/Register.jsx';
-import Context from './Context/Context.jsx';
+import Context, { AuthContext } from './Context/Context.jsx';
 import Login from './components/Login/Login.jsx';
 import Home from './components/Home/Home.jsx';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -30,11 +30,18 @@ import Withdrawals from './components/Worker/Withdrawals.jsx';
 import AdminDashboard from './components/Admin/AdminDashboard.jsx';
 import AdminHome from './components/Admin/AdminHome.jsx';
 import AdminManageUsers from './components/Admin/AdminManageUsers.jsx';
+import AdminManageTasks from './components/Admin/AdminManageTasks.jsx';
+import RoleBasedRoute from './components/Hooks/RoleBasedRoute.jsx';
+
 
 
 const queryClient = new QueryClient();
+  
 
-const router = createBrowserRouter([
+
+
+const router = createBrowserRouter(
+  [
   {
     path: "/",
     element: <App></App>,
@@ -60,7 +67,7 @@ const router = createBrowserRouter([
   },
   {
     path:'workerdashboard',
-    element:<WorkerDashboard></WorkerDashboard>,
+    element:<PrivateRoute><RoleBasedRoute role='worker'><WorkerDashboard></WorkerDashboard></RoleBasedRoute></PrivateRoute>,
     children:[
       {
         path:"",
@@ -73,7 +80,7 @@ const router = createBrowserRouter([
       {
         path:'mylist/:id',
         element:<PrivateRoute><TaskDetails></TaskDetails></PrivateRoute>,
-        loader: ({params}) => fetch(`http://localhost:5000/tasks/${params.id}`)
+        loader: ({params}) => fetch(`https://assignment-12-server-ebon.vercel.app/tasks/${params.id}`)
       },
       {
         path:'mysubmissions',
@@ -87,7 +94,7 @@ const router = createBrowserRouter([
   },
   {
     path:'taskCreatordashboard',
-    element:<PrivateRoute><TaskCreatorDashboard></TaskCreatorDashboard></PrivateRoute>,
+    element:<PrivateRoute><RoleBasedRoute role='taskCreator'><TaskCreatorDashboard></TaskCreatorDashboard></RoleBasedRoute></PrivateRoute>,
     children:[
       {
         path:"",
@@ -113,7 +120,7 @@ const router = createBrowserRouter([
   },
   {
     path:'admindashboard',
-    element:<PrivateRoute><AdminDashboard></AdminDashboard></PrivateRoute>,
+    element:<PrivateRoute><RoleBasedRoute role='Admin'><AdminDashboard></AdminDashboard></RoleBasedRoute></PrivateRoute>,
     children:[
       {
         path:"",
@@ -121,6 +128,10 @@ const router = createBrowserRouter([
       },{
         path:'manageUsers',
         element:<PrivateRoute><AdminManageUsers></AdminManageUsers></PrivateRoute>
+      },
+      {
+        path:'manageTasks',
+        element:<PrivateRoute><AdminManageTasks></AdminManageTasks></PrivateRoute>
       }
     ]
   }

@@ -33,7 +33,7 @@ const AdminDashboard = () =>{
                     <ul className="menu">
                         <li><Link to='' className="text-center flex items-center justify-center text-lg my-2 text-white">Home</Link></li>
                         <li><NavLink to='manageUsers' className="text-center flex items-center justify-center text-lg my-2 text-white">Manage Users</NavLink></li>
-                        <li><NavLink className="text-center flex items-center justify-center text-lg my-2 text-white">Manage Tasks</NavLink></li>
+                        <li><NavLink to='manageTasks' className="text-center flex items-center justify-center text-lg my-2 text-white">Manage Tasks</NavLink></li>
                     </ul>
                 </div>
                 <div className="flex-1">

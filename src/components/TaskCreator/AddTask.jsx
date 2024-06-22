@@ -110,7 +110,7 @@ const AddTask =() =>{
                         if (userId) {
                           const newCoins = parseInt(coin - (task_count * payable_amount)); // Correct points calculation
                           const point = { coins: newCoins };
-                          const updateRes = await fetch(`http://localhost:5000/users/${userId}`, {
+                          const updateRes = await fetch(`https://assignment-12-server-ebon.vercel.app/users/${userId}`, {
                             method: 'PUT',
                             headers: {
                               'Content-Type': 'application/json'

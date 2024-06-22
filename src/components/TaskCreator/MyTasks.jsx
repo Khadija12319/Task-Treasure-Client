@@ -119,7 +119,7 @@ const MyTasks = () => {
             await axiosSecure.delete(`/tasks/${task._id}`);
             const point = { coins: newCoins };
             
-            const response = await fetch(`http://localhost:5000/users/${userId}`, {
+            const response = await fetch(`https://assignment-12-server-ebon.vercel.app/users/${userId}`, {
               method: 'PUT',
               headers: {
                 'Content-Type': 'application/json'
